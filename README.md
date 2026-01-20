@@ -50,17 +50,34 @@ Before you begin, ensure you have the following installed:
    ```
 
 4. **Set up the database**
+
+   **Option A: Using Docker (Recommended for Development)**
    
-   Create a new PostgreSQL database:
+   If you have Docker installed, this is the easiest way:
    ```bash
+   # Start PostgreSQL with Docker Compose
+   docker-compose up -d
+   
+   # Copy the local Docker environment file
+   cp .env.local.example .env
+   ```
+   
+   The database will be automatically initialized with the schema.
+
+   **Option B: Using Local PostgreSQL**
+   
+   If you have PostgreSQL installed locally:
+   ```bash
+   # Create a new PostgreSQL database
    psql -U postgres
    CREATE DATABASE custom_wp_site;
    \q
-   ```
    
-   Run the database schema:
-   ```bash
+   # Run the database schema
    psql -U your_username -d custom_wp_site -f src/lib/schema.sql
+   
+   # Or use the provided script
+   ./scripts/init-db.sh
    ```
 
 ## 🚀 Running the Application
@@ -189,6 +206,24 @@ curl http://localhost:3000/api/posts
 - `npm run build` - Build for production
 - `npm start` - Start production server
 - `npm run lint` - Run ESLint
+
+## 🐳 Docker Commands
+
+If using Docker for local development:
+
+```bash
+# Start PostgreSQL
+docker-compose up -d
+
+# Stop PostgreSQL
+docker-compose down
+
+# View logs
+docker-compose logs -f
+
+# Remove everything (including data)
+docker-compose down -v
+```
 
 ## 📝 License
 
