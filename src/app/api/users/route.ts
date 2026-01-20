@@ -27,10 +27,11 @@ export async function POST(request: NextRequest) {
     );
     
     return NextResponse.json(result.rows[0], { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error creating user:', error);
     
-    if (error.code === '23505') { // Unique constraint violation
+    // PostgreSQL error handling
+    if (error && typeof error === 'object' && 'code' in error && error.code === '23505') {
       return NextResponse.json({ error: 'Email already exists' }, { status: 409 });
     }
     

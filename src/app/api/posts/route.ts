@@ -32,10 +32,11 @@ export async function POST(request: NextRequest) {
     );
     
     return NextResponse.json(result.rows[0], { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error creating post:', error);
     
-    if (error.code === '23503') { // Foreign key constraint violation
+    // PostgreSQL error handling
+    if (error && typeof error === 'object' && 'code' in error && error.code === '23503') {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
     
